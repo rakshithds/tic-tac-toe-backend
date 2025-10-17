@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Backend
+target/
+.mvn/
+*.iml
+.idea/
+
+# Frontend
+node_modules/
+build/
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
