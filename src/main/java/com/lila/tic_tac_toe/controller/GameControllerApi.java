@@ -35,11 +35,22 @@ public class GameControllerApi {
     GameWebSocketHandler gameWebSocketHandler;
 
     @PostMapping("/matchmaking")
-    public Map<String, Object> findMatch(@RequestBody Map<String, Object> request) {
+    public synchronized Map<String, Object> findMatch(@RequestBody Map<String, Object> request) {
         String playerId = (String) request.get("playerId");
         Game game = matchmakingService.findOrCreateMatch(playerId);
 
         gameRepository.save(game);
+
+        if ("IN_PROGRESS".equals(game.getStatus().toString())) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                    gameWebSocketHandler.broadcastGameState(game.getId());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+        }
 
         return Map.of(
                 "gameId", game.getId(),
