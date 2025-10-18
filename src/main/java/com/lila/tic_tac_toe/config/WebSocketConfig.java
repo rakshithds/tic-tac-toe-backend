@@ -20,6 +20,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(gameWebSocketHandler, "/game/{gameId}")
-                .setAllowedOrigins("*");
+                .setAllowedOrigins(
+                        "https://jade-flan-834694.netlify.app",
+                        "http://localhost:3000");
     }
 }
